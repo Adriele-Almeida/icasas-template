@@ -4,6 +4,8 @@ import { Glyph } from "@/components/glyph"
 import { DEFAULT_DRAFT, MAX_SPECS, type PosterDraft } from "@/lib/draft"
 import { ICON_CATALOG, ICON_GROUPS } from "@/lib/icon-catalog"
 import {
+  EXPORT_H,
+  EXPORT_W,
   hitSlot,
   POSTER_H,
   POSTER_W,
@@ -39,7 +41,15 @@ function isIos() {
 }
 
 function pngFromCanvas(canvas: HTMLCanvasElement) {
-  const dataUrl = canvas.toDataURL("image/png")
+  const out = document.createElement("canvas")
+  out.width = EXPORT_W
+  out.height = EXPORT_H
+  const ctx = out.getContext("2d")
+  if (!ctx) return new Blob()
+  ctx.imageSmoothingEnabled = true
+  ctx.imageSmoothingQuality = "high"
+  ctx.drawImage(canvas, 0, 0, EXPORT_W, EXPORT_H)
+  const dataUrl = out.toDataURL("image/png")
   const base64 = dataUrl.slice(dataUrl.indexOf(",") + 1)
   const binary = atob(base64)
   const bytes = new Uint8Array(binary.length)

@@ -1,5 +1,13 @@
-export const POSTER_W = 1080
-export const POSTER_H = 1440
+export const EXPORT_W = 1080
+export const EXPORT_H = 1440
+export const POSTER_W = 1500
+export const POSTER_H = 2000
+const S = POSTER_W / EXPORT_W
+export const PX = S
+
+function s(n: number) {
+  return n * S
+}
 
 export type Rect = { x: number; y: number; w: number; h: number }
 export type PhotoSlot = "hero" | "left" | "right"
@@ -11,15 +19,15 @@ export type Focus = {
 }
 
 export const LAYOUT = {
-  card: { x: 39, y: 590, w: 778, h: 312, r: 26 },
-  specsY: 924,
-  specsH: 100,
-  photoY: 1024,
-  photoH: 296,
-  photoMargin: 3,
-  photoGap: 7,
-  photoR: 16,
-  footerY: 1322,
+  card: { x: s(39), y: s(590), w: s(778), h: s(312), r: s(26) },
+  specsY: s(924),
+  specsH: s(100),
+  photoY: s(1024),
+  photoH: s(296),
+  photoMargin: s(3),
+  photoGap: s(7),
+  photoR: s(16),
+  footerY: s(1322),
 }
 
 export function slotRect(slot: PhotoSlot): Rect {

@@ -4,6 +4,7 @@ import {
   LAYOUT,
   POSTER_H,
   POSTER_W,
+  PX,
   slotRect,
   sourceWindow,
   type PhotoSlot,
@@ -112,13 +113,13 @@ function metal(ctx: CanvasRenderingContext2D, y: number, size: number) {
 
 function measureTitle(ctx: CanvasRenderingContext2D, text: string, size: number) {
   ctx.font = font(700, size, '"Cormorant Garamond"')
-  ctx.letterSpacing = "1.4px"
+  ctx.letterSpacing = `${1.4 * PX}px`
   return ctx.measureText(text).width
 }
 
 function layoutTitle(ctx: CanvasRenderingContext2D, title: string, accent: string, maxW: number) {
   const words = title.split(/\s+/).filter(Boolean)
-  for (let size = 56; size >= 28; size -= 1) {
+  for (let size = 56 * PX; size >= 28 * PX; size -= 1) {
     const gap = accent ? size * 0.22 : 0
     const accentW = accent ? measureTitle(ctx, accent, size) : 0
     const extra = accent ? gap + accentW : 0
@@ -142,12 +143,12 @@ function layoutTitle(ctx: CanvasRenderingContext2D, title: string, accent: strin
       return { lines: [full], size, accentOnOwnLine: Boolean(accent) }
     }
   }
-  return { lines: words.length ? [words.join(" ")] : [], size: 28, accentOnOwnLine: Boolean(accent) }
+  return { lines: words.length ? [words.join(" ")] : [], size: 28 * PX, accentOnOwnLine: Boolean(accent) }
 }
 
 function drawCard(ctx: CanvasRenderingContext2D, draft: PosterDraft) {
   const card = LAYOUT.card
-  const padX = 36
+  const padX = 36 * PX
   const left = card.x + padX
   const right = card.x + card.w - padX
   const maxW = right - left
@@ -155,13 +156,13 @@ function drawCard(ctx: CanvasRenderingContext2D, draft: PosterDraft) {
   const accent = up(draft.accent)
   const laid = layoutTitle(ctx, title, accent, maxW)
   const size = laid.size
-  ctx.letterSpacing = "1.4px"
+  ctx.letterSpacing = `${1.4 * PX}px`
   ctx.textBaseline = "top"
   ctx.textAlign = "left"
   ctx.shadowColor = "rgba(0,0,0,0.72)"
   ctx.shadowBlur = 0
-  ctx.shadowOffsetY = 3
-  let y = card.y + 28
+  ctx.shadowOffsetY = 3 * PX
+  let y = card.y + 28 * PX
   laid.lines.forEach((line, index) => {
     ctx.font = font(700, size, '"Cormorant Garamond"')
     ctx.fillStyle = metal(ctx, y, size)
@@ -187,46 +188,46 @@ function drawCard(ctx: CanvasRenderingContext2D, draft: PosterDraft) {
   ctx.shadowColor = "transparent"
   const subtitle = draft.subtitle.trim()
   if (subtitle) {
-    y += 6
-    ctx.font = font(500, 22, "Outfit")
+    y += 6 * PX
+    ctx.font = font(500, 22 * PX, "Outfit")
     ctx.fillStyle = CREAM
     ctx.fillText(subtitle, left, y, maxW)
   }
 
   const note = up(draft.priceNote)
   const price = draft.price.trim()
-  ctx.font = font(700, 36, "Outfit")
-  const priceW = Math.min(ctx.measureText(price || "R$").width, 280)
-  const pillW = Math.max(210, priceW + 48)
-  const pillH = 62
+  ctx.font = font(700, 36 * PX, "Outfit")
+  const priceW = Math.min(ctx.measureText(price || "R$").width, 280 * PX)
+  const pillW = Math.max(210 * PX, priceW + 48 * PX)
+  const pillH = 62 * PX
   const pillX = right - pillW
-  const noteH = note ? 26 : 0
-  const pillY = card.y + card.h - 28 - noteH - pillH
+  const noteH = note ? 26 * PX : 0
+  const pillY = card.y + card.h - 28 * PX - noteH - pillH
   if (price) {
     ctx.save()
-    roundRect(ctx, pillX, pillY, pillW, pillH, 16)
+    roundRect(ctx, pillX, pillY, pillW, pillH, 16 * PX)
     ctx.fillStyle = "#0d0d0f"
     ctx.fill()
     ctx.shadowColor = "rgba(230,113,38,0.8)"
-    ctx.shadowBlur = 16
-    ctx.lineWidth = 2
+    ctx.shadowBlur = 16 * PX
+    ctx.lineWidth = 2 * PX
     ctx.strokeStyle = ORANGE
     ctx.stroke()
     ctx.shadowBlur = 0
     ctx.fillStyle = ORANGE
-    ctx.font = font(700, 36, "Outfit")
+    ctx.font = font(700, 36 * PX, "Outfit")
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
-    ctx.fillText(price, pillX + pillW / 2, pillY + pillH / 2 + 1, pillW - 28)
+    ctx.fillText(price, pillX + pillW / 2, pillY + pillH / 2 + PX, pillW - 28 * PX)
     ctx.restore()
   }
   if (note) {
-    ctx.font = font(500, 15, "Outfit")
+    ctx.font = font(500, 15 * PX, "Outfit")
     ctx.fillStyle = CREAM
     ctx.textAlign = "center"
     ctx.textBaseline = "top"
-    ctx.letterSpacing = "1.6px"
-    ctx.fillText(note, pillX + pillW / 2, pillY + pillH + 8, pillW + 20)
+    ctx.letterSpacing = `${1.6 * PX}px`
+    ctx.fillText(note, pillX + pillW / 2, pillY + pillH + 8 * PX, pillW + 20 * PX)
     ctx.letterSpacing = "0px"
   }
 
@@ -234,16 +235,16 @@ function drawCard(ctx: CanvasRenderingContext2D, draft: PosterDraft) {
   const place2 = up(draft.place2)
   const lines = [place1, place2].filter(Boolean)
   if (lines.length) {
-    const blockH = lines.length * 22
+    const blockH = lines.length * 22 * PX
     const blockY = pillY + pillH / 2 - blockH / 2
-    drawPin(ctx, left + 12, blockY + blockH / 2, 30)
+    drawPin(ctx, left + 12 * PX, blockY + blockH / 2, 30 * PX)
     ctx.textAlign = "left"
     ctx.textBaseline = "top"
-    ctx.font = font(500, 17, "Outfit")
+    ctx.font = font(500, 17 * PX, "Outfit")
     ctx.fillStyle = CREAM
-    ctx.letterSpacing = "0.8px"
+    ctx.letterSpacing = `${0.8 * PX}px`
     lines.forEach((line, index) => {
-      ctx.fillText(line, left + 34, blockY + index * 22, pillX - left - 48)
+      ctx.fillText(line, left + 34 * PX, blockY + index * 22 * PX, pillX - left - 48 * PX)
     })
     ctx.letterSpacing = "0px"
   }
@@ -254,10 +255,10 @@ function drawSpecs(ctx: CanvasRenderingContext2D, draft: PosterDraft, redraw: ()
   if (!visible.length) return
   const count = visible.length
   const col = POSTER_W / count
-  const iconSize = count >= 7 ? 26 : 34
-  const iconY = LAYOUT.specsY + (count >= 7 ? 14 : 22)
-  const labelMax = count >= 7 ? 14 : 18
-  const labelMin = count >= 7 ? 10 : 12
+  const iconSize = (count >= 7 ? 26 : 34) * PX
+  const iconY = LAYOUT.specsY + (count >= 7 ? 14 : 22) * PX
+  const labelMax = (count >= 7 ? 14 : 18) * PX
+  const labelMin = (count >= 7 ? 10 : 12) * PX
   visible.forEach((spec, index) => {
     const cx = col * index + col / 2
     const image = spec.icon ? iconImage(spec.icon, 72, redraw) : null
@@ -269,17 +270,17 @@ function drawSpecs(ctx: CanvasRenderingContext2D, draft: PosterDraft, redraw: ()
       ctx.textBaseline = "top"
       let labelSize = labelMax
       ctx.font = font(500, labelSize, "Outfit")
-      while (labelSize > labelMin && ctx.measureText(label).width > col - 12) {
+      while (labelSize > labelMin && ctx.measureText(label).width > col - 12 * PX) {
         labelSize -= 1
         ctx.font = font(500, labelSize, "Outfit")
       }
-      const labelY = image ? iconY + iconSize + 10 : iconY + iconSize / 2 - labelSize / 2
-      ctx.fillText(label, cx, labelY, col - 16)
+      const labelY = image ? iconY + iconSize + 10 * PX : iconY + iconSize / 2 - labelSize / 2
+      ctx.fillText(label, cx, labelY, col - 16 * PX)
     }
     if (index > 0) {
       const x = col * index
       ctx.strokeStyle = ORANGE
-      ctx.lineWidth = 2
+      ctx.lineWidth = 2 * PX
       ctx.beginPath()
       ctx.moveTo(x, iconY + 2)
       ctx.lineTo(x, iconY + iconSize - 2)
@@ -307,7 +308,9 @@ export function renderPoster(
   if (right && right.complete && right.naturalWidth) drawCover(ctx, right, "right", draft)
 
   if (fundo && fundo.complete && fundo.naturalWidth) {
-    ctx.drawImage(fundo, 0, 0, POSTER_W, POSTER_H)
+    ctx.imageSmoothingEnabled = false
+    ctx.drawImage(fundo, 0, 0)
+    ctx.imageSmoothingEnabled = true
   }
 
   const hole = (slot: PhotoSlot, label: string) => {
@@ -317,7 +320,7 @@ export function renderPoster(
     ctx.fillStyle = "#8a847b"
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
-    ctx.font = font(500, slot === "hero" ? 22 : 18, "Outfit")
+    ctx.font = font(500, (slot === "hero" ? 22 : 18) * PX, "Outfit")
     ctx.fillText(label, rect.x + rect.w * (slot === "hero" ? 0.68 : 0.5), rect.y + rect.h * (slot === "hero" ? 0.46 : 0.5))
   }
   hole("hero", "Foto de cima")
