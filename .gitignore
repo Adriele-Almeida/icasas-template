@@ -1,4 +1,6 @@
 node_modules
+dist-pages
+dist
 .vercel
 dist
 .env

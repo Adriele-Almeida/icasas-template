@@ -128,7 +128,7 @@ export function Studio() {
       logoRef.current = logo
       setFrame((value) => value + 1)
     }
-    logo.src = "/template/fundo.png"
+    logo.src = `${import.meta.env.BASE_URL}template/fundo.png`
     void document.fonts.load('700 64px "Cormorant Garamond"').then(() => {
       if (!cancel) setFrame((value) => value + 1)
     })
@@ -469,7 +469,7 @@ export function Studio() {
           <section className="border-t border-line px-4 py-5">
             <h2 className="text-sm font-semibold text-fg">Modelo</h2>
             <img
-              src="/template/modelo.jpg"
+              src={`${import.meta.env.BASE_URL}template/modelo.jpg`}
               alt="Modelo do template ICASAS"
               className="mt-3 w-full rounded-xl ring-1 ring-line"
             />
